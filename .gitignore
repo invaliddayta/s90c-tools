@@ -1,0 +1,32 @@
+# Private research and target configuration
+/firmware/
+/captures/
+/reports/
+/local/
+/private/
+/shots/
+/tools/tv_access/config.json
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Credentials
+*.token
+*.old-token-*
+secret.json
+private.pem
+*.key
+
+# Regenerable caches/build outputs; shipped access DLLs remain tracked
+/result
+/result-*
+__pycache__/
+*.pyc
+**/bin/
+**/obj/
+/tools/app_sync_guard/build/
+/tools/tv_access/bootstrap/SamsungTvArchiveRoot
+/tools/tv_access/bootstrap/*.deps.json
+/tools/tv_access/bootstrap/*.pdb
+*.wgt

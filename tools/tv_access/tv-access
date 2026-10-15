@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Direct laptop -> TV SDB transport. No lab/callback fallback.
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "$(readlink -f -- "$0")")" && pwd)
+if command -v openssl >/dev/null 2>&1; then
+    exec python3 "$ROOT/tv_sdb.py" "$@"
+fi
+if command -v nix >/dev/null 2>&1; then
+    exec nix shell nixpkgs#openssl -c python3 "$ROOT/tv_sdb.py" "$@"
+fi
+printf "tv-access requires OpenSSL on PATH (or Nix for a temporary shell).\n" >&2
+exit 125

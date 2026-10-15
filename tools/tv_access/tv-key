@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# tv-key KEY [KEY...] e.g. tv-key XF86Home Down*3 Return sleep:2
+# Key names: XF86Home XF86Back XF86Exit XF86Menu Up Down Left Right Return.
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "$(readlink -f -- "$0")")" && pwd)
+if [[ $# = 0 || ${1:-} = --help ]]; then
+    printf 'Usage: tv-key KEY [KEY...] (repeat: Down*3; delay: sleep:2)\n'
+    exit 0
+fi
+cmd=""
+for arg in "$@"; do
+    if [[ "$arg" == sleep:* ]]; then
+        delay=${arg#sleep:}
+        [[ "$delay" =~ ^[0-9]+([.][0-9]+)?$ ]] || { echo 'Invalid delay' >&2; exit 2; }
+        cmd+="sleep $delay; "
+    else
+        key=${arg%%\**}; count=1
+        if [[ "$arg" == *\** ]]; then count=${arg#*\*}; fi
+        [[ "$key" =~ ^[A-Za-z0-9_]+$ && "$count" =~ ^[1-9][0-9]?$ ]] || { echo 'Invalid key or repeat (1-99)' >&2; exit 2; }
+        for ((i=0; i<count; i++)); do
+            cmd+="(input_keyevent $key </dev/null >/dev/null 2>&1 &); sleep 0.6; "
+        done
+    fi
+done
+exec "$ROOT/tv-access" "$cmd printf 'ok\\n'"

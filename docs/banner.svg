@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">S90C tools</title>
+  <desc id="desc">A dark television outline showing a terminal session: tv-access 'id -u' printing 0, tv-setup plan as a preview, then tv-setup apply waiting for the user to type APPLY.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0d12"/>
+      <stop offset="1" stop-color="#151a24"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5eead4"/>
+      <stop offset="1" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="360" fill="url(#bg)"/>
+
+  <!-- Left: title -->
+  <g font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+    <text x="64" y="132" fill="#e5e7eb" font-size="44" font-weight="700">S90C tools</text>
+    <rect x="66" y="152" width="120" height="4" rx="2" fill="url(#glow)"/>
+    <text x="64" y="198" fill="#9ca3af" font-size="22">Direct SDB root access for Tizen 7.</text>
+    <text x="64" y="228" fill="#9ca3af" font-size="22">Optional debloating. No firmware flash.</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" fill="#6b7280">
+      <text x="64" y="284">QE77S90C · ARMv7 · T-PTMCDEUC-REL-202408210126</text>
+    </g>
+  </g>
+
+  <!-- Right: TV with terminal -->
+  <g transform="translate(660 48)">
+    <rect x="0" y="0" width="476" height="252" rx="10" fill="#05060a" stroke="#2a3140" stroke-width="3"/>
+    <rect x="14" y="14" width="448" height="224" rx="4" fill="#000"/>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16">
+      <text x="34" y="52" fill="#6b7280">$ <tspan fill="#e5e7eb">tv-access 'id -u'</tspan></text>
+      <text x="34" y="78" fill="#5eead4">0</text>
+      <text x="34" y="116" fill="#6b7280">$ <tspan fill="#e5e7eb">tv-setup plan</tspan></text>
+      <text x="34" y="142" fill="#9ca3af">  preview only</text>
+      <text x="34" y="180" fill="#6b7280">$ <tspan fill="#e5e7eb">tv-setup apply</tspan></text>
+      <text x="34" y="206" fill="#fbbf24">  type APPLY to continue<tspan fill="#e5e7eb">▌</tspan></text>
+    </g>
+    <rect x="208" y="252" width="60" height="18" fill="#1f2530"/>
+    <rect x="158" y="270" width="160" height="6" rx="3" fill="#2a3140"/>
+  </g>
+</svg>

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# tv-shot [OUT.png] [--full] — bounded compositor capture over direct SDB.
+# Protected/hardware video may be black. Output is 960px wide unless --full.
+set -euo pipefail
+ROOT=$(cd -- "$(dirname -- "$(readlink -f -- "$0")")" && pwd)
+out=""; full=0
+for a in "$@"; do
+    case "$a" in
+        --full) full=1;;
+        -h|--help) printf 'Usage: tv-shot [OUT.png] [--full]\n'; exit 0;;
+        *) out="$a";;
+    esac
+done
+if [ -z "$out" ]; then
+    mkdir -p /tmp/tv-shot
+    out=/tmp/tv-shot/$(date +%Y%m%d-%H%M%S).png
+fi
+mkdir -p "$(dirname "$out")"
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+# Expand the embedded script's variables on the TV, never on the computer.
+# shellcheck disable=SC2016
+"$ROOT/tv-access" --timeout 15 '
+d=$(mktemp -d /tmp/tv-shot.XXXXXX) || exit 2
+trap '\''rm -rf "$d"'\'' EXIT
+enlightenment_info -dump_screen -p "$d/" -n capture.png </dev/null >/dev/null 2>&1 &
+p=$!
+i=0
+while kill -0 "$p" 2>/dev/null && [ "$i" -lt 8 ]; do sleep 1; i=$((i+1)); done
+if kill -0 "$p" 2>/dev/null; then
+    kill -9 "$p" 2>/dev/null
+    wait "$p" 2>/dev/null
+    echo "tv-shot: compositor capture timed out" >&2
+    exit 3
+fi
+wait "$p" 2>/dev/null || true
+[ -s "$d/capture.png" ] || { echo "tv-shot: no image produced" >&2; exit 3; }
+n=$(wc -c < "$d/capture.png")
+[ "$n" -le 1048576 ] || { echo "tv-shot: PNG exceeds 1 MiB transfer cap" >&2; exit 4; }
+head -c "$n" "$d/capture.png"
+' > "$tmp/s.png"
+if [ "$full" = 1 ]; then
+    cp "$tmp/s.png" "$out"
+else
+    if command -v magick >/dev/null 2>&1; then
+        magick "$tmp/s.png" -resize 960x "$out"
+    elif command -v nix >/dev/null 2>&1; then
+        nix shell nixpkgs#imagemagick -c magick "$tmp/s.png" -resize 960x "$out"
+    else
+        echo 'tv-shot: resizing needs ImageMagick or Nix; use --full without either' >&2
+        exit 2
+    fi
+fi
+printf '%s\n' "$out"
