@@ -48,6 +48,14 @@ KNOWN_GOOD = {
         'T-PTMCDEUC-2000.2, verified 2026-10-09'),
 }
 
+# Builds where a user reported the probe and a root command working. Not tested
+# by us; tv-setup is still S90C-only.
+COMMUNITY_REPORTED = {
+    'T-PTMDDEUC-REL-202601212151': (
+        'Samsung S90D, Tizen 8.0, root probe and id reported working by a user '
+        '(issue #1); not tested by us, tv-setup unsupported'),
+}
+
 # Read-only device/capability report. Success of this job through the bootstrap
 # is itself the end-to-end proof: handshake, appinstall path, dotnet and
 # tarlauncher all had to work for the report to come back with uid=0.
@@ -210,8 +218,12 @@ def main():
                           file=sys.stderr)
                     return 125
                 known = KNOWN_GOOD.get(build)
+                reported = COMMUNITY_REPORTED.get(build)
                 if known:
                     print('Assessment: ' + known)
+                elif reported:
+                    print('Assessment: the root chain WORKS on this device. Community report: '
+                          + reported + '.')
                 else:
                     print('Assessment: the root chain WORKS on this device, but this firmware '
                           'build is untested — treat as experimental and report your result.')

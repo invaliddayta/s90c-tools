@@ -8,6 +8,14 @@ Uses [chris-ritsen's archive-root bootstrap](https://github.com/chris-ritsen/sam
 Tested on **QE77S90CATXXN (QE77S90C), Tizen 7 / ARMv7**, firmware 2000.2,
 build `T-PTMCDEUC-REL-202408210126`. Other builds are untested.
 
+User reports (root access only, not tested by us; `tv-setup` stays S90C-only):
+
+| Model | Tizen | Build | Result |
+|---|---|---|---|
+| S90D | 8.0.0, kernel 5.4.249, ARMv7 | `T-PTMDDEUC-REL-202601212151` | `--probe` and root `id` work ([#1](https://github.com/invaliddayta/s90c-tools/issues/1)) |
+
+Please open an issue with your `--probe` output if it works on another model.
+
 ## Root access
 
 Use a trusted LAN. Turn off automatic firmware and app updates before starting.

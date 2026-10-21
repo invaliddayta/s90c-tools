@@ -18,7 +18,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from sdb_direct import DirectSDB, SDBError
 from tv_config import resolve_host
-from tv_sdb import KNOWN_GOOD, build_package, main, parse_probe
+from tv_sdb import COMMUNITY_REPORTED, KNOWN_GOOD, build_package, main, parse_probe
 
 
 class FakeSocket:
@@ -129,6 +129,10 @@ class ProbeTests(unittest.TestCase):
     def test_known_good_build_recognized(self):
         info, _, _ = parse_probe(self.SAMPLE)
         self.assertIn(info['build'], KNOWN_GOOD)
+
+    def test_community_builds_are_not_known_good(self):
+        self.assertIn('T-PTMDDEUC-REL-202601212151', COMMUNITY_REPORTED)
+        self.assertFalse(set(COMMUNITY_REPORTED) & set(KNOWN_GOOD))
 
     def test_missing_binary_reported(self):
         _, present, missing = parse_probe(b'uid=0\nmissing:/usr/sbin/sdbd-tarlauncher\n')
